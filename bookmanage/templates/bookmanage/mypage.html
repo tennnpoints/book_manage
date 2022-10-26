@@ -1,0 +1,231 @@
+{% extends 'bookmanage/base.html' %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mypage.css' %}" ></link>
+{% endblock %}
+
+{% block content %}
+<h1 class="display-5"><ins>Book Manage</ins></h1>
+<h2 class="display-7">{{ request.session.username }}さん、おかえりなさい</h2>
+    
+<table class="table table-bordered w-75 m-3">
+    <thead>
+    </thead>
+    <tr>
+        <td style="background-color:#CCCCCC" align="center" colspan="5">
+            未読
+        </td>
+    </tr>
+{% if unreadlist %}
+    <tr>
+        <th>書籍名</th>
+        <th>著者名</th>
+        <th>開始日</th>
+        <th>読了日</th> 
+        <th></th>
+    </tr>
+{% for books in unreadlist.all %}
+        <tr>
+            <td>{{ books.book_name }}</>
+            <td>{{ books.book_author }}</td>
+            <td></td>
+            <td></td>
+            <td>
+                <input type="button" class="readbutton btn btn-success" value="未読へ" id="unread_{{ books.id }}" disabled>
+                <input type="button" class="readbutton btn btn-success" value="読書中へ" id="reading_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-success" value="読了へ" id="end_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-danger" value="削除" id="delete_{{ books.id }}">
+            </td>
+        </tr>
+{% endfor %}
+{% else %}
+    <tr>
+        <td align="center" colspan="5">
+            なし
+        </td>
+    </tr>
+{% endif %}
+
+<tr>
+    <td style="background-color:#CCCCCC" align="center" colspan="5">
+        読書中
+    </td>
+</tr>
+{% if readinglist %}
+    <tr>
+        <th>書籍名</th>
+        <th>著者名</th>
+        <th>開始日</th>
+        <th>読了日</th> 
+        <th></th>
+    </tr>
+{% for books in readinglist.all %}
+        <tr>
+            <td>{{ books.book_name }}</td>
+        
+            <td>{{ books.book_author }}</td>
+            <td>{{ books.book_start_date|date:"Y年m月d日" }}</td>
+            <td></td>
+            <td>
+                <input type="button" class="readbutton btn btn-success" value="未読へ" id="unread_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-success" value="読書中へ" id="reading_{{ books.id }}" disabled>
+                <input type="button" class="readbutton btn btn-success" value="読了へ" id="end_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-danger" value="削除" id="delete_{{ books.id }}">
+            </td>
+        </tr>
+{% endfor %}
+{% else %}
+    <tr>
+        <td align="center" colspan="5">
+            なし
+        </td>
+    </tr>
+{% endif %}
+        
+    <tr>
+        <td style="background-color:#CCCCCC" align="center" colspan="5">
+            読了済
+        </td>
+{% if readlist %}
+        <tr>
+            <th>書籍名</th>
+            <th>著者名</th>
+            <th>開始日</th>
+            <th>読了日</th> 
+            <th></th>
+        </tr>
+{% for books in readlist.all %}
+        <tr>
+            <td>{{ books.book_name }}</td>
+
+            <td>{{ books.book_author }}</td>
+            <td>{{ books.book_start_date|date:"Y年m月d日" }}</td>
+            <td>{{ books.book_end_date|date:"Y年m月d日" }}</td>
+            <td>
+                <input type="button" class="readbutton btn btn-success" value="未読へ" id="unread_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-success" value="読書中へ" id="reading_{{ books.id }}">
+                <input type="button" class="readbutton btn btn-success" value="読了へ" id="end_{{ books.id }}" disabled>
+                <input type="button" class="readbutton btn btn-danger" value="削除" id="delete_{{ books.id }}">
+            </td>
+        </tr>
+{% endfor %}
+{% else %}
+    <tr>
+        <td align="center" colspan="5">
+            なし
+        </td>
+    </tr>
+{% endif %}
+</table>
+
+<div class="card w-25 m-3">
+    <div class="card-header">
+      書籍の新規登録
+    </div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-3">
+                <label for="inputBooktitle" class="sr-only">書籍名</label>
+            </div>
+            <div class="col-9">
+                <input type="text" id="book_name" class="form-control" placeholder="書籍名" required>
+            </div>
+        </div>
+        
+        <div class="row mb-2">
+            <div class="col-3">
+                <label for="inputBooktitle" class="sr-only">著者名</label>
+            </div>
+            <div class="col-9">
+                <input type="text" id="book_author" class="form-control" placeholder="著者名" required>
+            </div>
+            
+        </div>
+        <div class="mb-2">
+                <input class="btn btn-primary w-100" id="bookregist" type="button" value="登録">
+        </div>
+        <div style="display:none" id="bookerror" class="row alert alert-danger" role="alert"></div>
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}
+{% block js%}
+    <script>
+        $('.readbutton').on('click',function(e) {
+            e.preventDefault();
+            let ids = $(this).attr('id').split('_');
+            console.log(ids);
+            let proc_status;
+            switch (ids[0]){
+                case 'unread':
+                    proc_status = '{{ UNREAD }}';
+                    break;
+                case 'reading':
+                    proc_status = '{{ READING }}';
+                    break;
+                case 'end':
+                    proc_status = '{{ END }}';
+                    break;
+                case 'delete':
+                    if (window.confirm('本当に削除してよろしいですか？') == false ){
+                        return;
+                    }
+                    proc_status = '{{ DELETE }}';
+                    break;
+            }
+            let param = {
+                'proc_status':proc_status,
+                'book_id':ids[1]
+            }
+            console.log(param);
+            $.ajax({
+                'url':'{% url "bookmanage:mypageajax" %}',
+                'type':'POST',
+                'data':param,
+                'dataType':'json'
+            })
+            .done(function(res){
+                console.log(res.msg);
+                location.reload();
+            })
+            .fail(function(res){
+                console.log('failed');
+                console.log(res);
+            })
+        })
+
+        $('#bookregist').on('click',function(e){
+            $('#bookerror').hide();
+            let book_name = $('#book_name').val();
+            let book_author = $('#book_author').val();
+            let param = {
+                'book_name':book_name,
+                'book_author':book_author
+            }
+
+            $.ajax({
+                'url':'{% url "bookmanage:bookregistajax" %}',
+                'type':'POST',
+                'data':param,
+                'dataType':'json'
+            })
+            .done(function(res){
+                if ( res.error == 1 ){
+                    $('#bookerror').html(res.errormsg);
+                    $('#bookerror').show();
+                }else{
+                    location.reload();
+                }
+            })
+            .fail(function(res){
+                console.log('failed');
+                console.log(res);
+            })
+        })
+    </script>    
+{% endblock %}
