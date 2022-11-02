@@ -159,7 +159,7 @@ LOGGING = {
             'encoding': 'utf-8',
             'formatter': 'production',
         },
-        'bookmange_file': {
+        'bookmanage_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/bookmanage.log'),
@@ -177,7 +177,7 @@ LOGGING = {
     # ロガーの設定
     'loggers': {
         # アプリケーションのロガー
-        'bookmange': {
+        'bookmanage': {
             'handlers': ['bookmanage_file', 'console'],
             'level': 'DEBUG',
             'propagate': False,
