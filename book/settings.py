@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-hg*^!2ey7n9v8x=)drw@184jji2=tq*l&4@64^8ov!pyavzrvx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -131,37 +131,62 @@ STATICFIELS_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGGING = {
-    'version': 1,   # これを設定しないと怒られる
-    'formatters': { # 出力フォーマットを文字列形式で指定する
-        'all': {    # 出力フォーマットに`all`という名前をつける
-            'format': '\t'.join([
-                "[%(levelname)s]",
-                "asctime:%(asctime)s",
-                "module:%(module)s",
-                "message:%(message)s",
-                "process:%(process)d",
-                "thread:%(thread)d",
-            ])
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
     },
-    'handlers': {  # ログをどこに出すかの設定
-        'file': {  # どこに出すかの設定に名前をつける `file`という名前をつけている
-            'level': 'DEBUG',  # DEBUG以上のログを取り扱うという意味
-            'class': 'logging.FileHandler',  # ログを出力するためのクラスを指定
-            'filename': os.path.join(BASE_DIR, 'log/django.log'),  # どこに出すか
-            'formatter': 'all',  # どの出力フォーマットで出すかを名前で指定
-        },
-        'console': { # どこに出すかの設定をもう一つ、こちらの設定には`console`という名前
-            'level': 'DEBUG',
-            # こちらは標準出力に出してくれるクラスを指定
-            'class': 'logging.StreamHandler', 
-            'formatter': 'all'
+    # ログ出力フォーマットの設定
+    'formatters': {
+        'production': {
+            'format': '%(asctime)s [%(levelname)s] %(process)d %(thread)d '
+                      '%(pathname)s:%(lineno)d %(message)s'
         },
     },
-    'loggers': {  # どんなloggerがあるかを設定する
-        'bookmanage': {  # commandという名前のloggerを定義
-            'handlers': ['file', 'console'],  # 先述のfile, consoleの設定で出力
+    # ハンドラの設定
+    'handlers': {
+        'django_file': {
             'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'bookmange_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/bookmange.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    # ロガーの設定
+    'loggers': {
+        # アプリケーションのロガー
+        'bookmange': {
+            'handlers': ['bookmange_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Django自身が出力するログ全般のロガー
+        'django': {
+            'handlers': ['django_file'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }
