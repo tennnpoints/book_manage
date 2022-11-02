@@ -162,7 +162,7 @@ LOGGING = {
         'bookmange_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/bookmange.log'),
+            'filename': os.path.join(BASE_DIR, 'logs/bookmanage.log'),
             'maxBytes': 1024 * 1024 * 10, # 10MB
             'backupCount': '5',
             'encoding': 'utf-8',
@@ -178,7 +178,7 @@ LOGGING = {
     'loggers': {
         # アプリケーションのロガー
         'bookmange': {
-            'handlers': ['bookmange_file', 'console'],
+            'handlers': ['bookmanage_file', 'console'],
             'level': 'DEBUG',
             'propagate': False,
         },
