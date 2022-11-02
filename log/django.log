@@ -1,7 +1,0 @@
-[INFO]	asctime:2022-10-19 19:52:08,199	module:log	message:Renew :2	process:59660	thread:55904
-[INFO]	asctime:2022-10-19 19:52:10,149	module:log	message:Renew :1	process:59660	thread:55904
-[INFO]	asctime:2022-10-19 19:52:12,760	module:log	message:Renew :3	process:59660	thread:55904
-[INFO]	asctime:2022-10-19 20:18:59,113	module:log	message:Book Name :lô”¼_˜b‘åŒn	process:45080	thread:79448
-[INFO]	asctime:2022-10-19 20:18:59,117	module:log	message:Author Name :XŒ©“o”ü•F	process:45080	thread:79448
-[INFO]	asctime:2022-10-19 20:20:45,066	module:views	message:Book Name :lô”¼_˜b‘åŒn	process:74132	thread:70712
-[INFO]	asctime:2022-10-19 20:20:45,067	module:views	message:Author Name :XŒ©“o”ü•F	process:74132	thread:70712

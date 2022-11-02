@@ -1,0 +1,7 @@
+2022-11-02 19:26:53,458 [INFO] 34180 33944 C:\Python39\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
+2022-11-02 19:27:13,710 [INFO] 8276 36504 C:\Python39\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
+2022-11-02 19:27:21,856 [INFO] 8276 47900 C:\Python39\lib\site-packages\django\core\servers\basehttp.py:187 "GET /bookmanage HTTP/1.1" 301 0
+2022-11-02 19:27:21,875 [INFO] 8276 47900 C:\Python39\lib\site-packages\django\core\servers\basehttp.py:187 "GET /bookmanage/ HTTP/1.1" 200 3044
+2022-11-02 19:27:22,073 [INFO] 8276 47900 C:\Python39\lib\site-packages\django\core\servers\basehttp.py:187 "GET /static/css/signin.css HTTP/1.1" 200 934
+2022-11-02 19:27:22,202 [WARNING] 8276 47900 C:\Python39\lib\site-packages\django\utils\log.py:241 Not Found: /favicon.ico
+2022-11-02 19:27:22,203 [WARNING] 8276 47900 C:\Python39\lib\site-packages\django\core\servers\basehttp.py:187 "GET /favicon.ico HTTP/1.1" 404 2219
